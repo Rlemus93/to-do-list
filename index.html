@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://unpkg.com/htmx.org@1.9.12"
+      integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+      crossorigin="anonymous"
+    ></script>
+    <title>To-Do List</title>
+  </head>
+  <body class="flex flex-col items-center bg-gray-100 min-h-screen">
+    <h1 class="mt-3 mb-3 text-center text-3xl font-bold underline">
+      To-Do List
+    </h1>
+    <div class="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
+      <form
+        hx-post="/create"
+        hx-target="#taskList"
+        hx-swap="beforeend"
+        id="taskForm"
+        class="bg-blue-50 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      >
+        <div class="mb-4">
+          <label class="block text-gray-700 text-lg font-bold mb-2" for="title"
+            >Title</label
+          >
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            name="title"
+            placeholder="Title"
+          />
+        </div>
+        <div class="mb-4">
+          <label
+            class="block text-gray-700 text-lg font-bold mb-2"
+            for="description"
+            >Description</label
+          >
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            name="description"
+            placeholder="Description"
+          />
+        </div>
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2"
+        >
+          Add Task
+        </button>
+      </form>
+    </div>
+    <br />
+    <br />
+    <h1 class="text-3xl font-bold underline mb-3">Tasks</h1>
+    <ul id="taskList" class="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
+      {{range .Tasks}}
+      <li id="task-{{.ID}}" class="bg-gray-200 p-2 mb-2 rounded shadow">
+        {{.Title}} - {{.Description}}
+        <div>
+          <button
+            hx-delete="/delete/{{.ID}}"
+            hx-target="#task-{{.ID}}"
+            hx-swap="outerHTML"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Delete
+          </button>
+        </div>
+      </li>
+      {{end}}
+    </ul>
+  </body>
+</html>
